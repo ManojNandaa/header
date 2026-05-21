@@ -1,0 +1,19 @@
+status = getAppSignedHeader(
+        (uint8_t *)&header,
+        KEY_SIZE_EDDSA,           /* or KEY_SIZE_RSA2048 */
+        0x0001U,                  /* module ID from your SBIT */
+        HEADER_TYPE_NORMAL,
+        NEGATIVE_NONE,
+        &errCtx
+    );
+
+    if (status != APP_OK) {
+        /* Log failure details from errCtx */
+        TestCaseResultFail(&param, status);
+        return;
+    }
+
+    /* Fill HSE service descriptor */
+    HSE_Desc.srvId = HSE_SRV_ID_VERIFY_HOST_APP_SIGN_HDR_EXT;
+    HSE_Desc.hseSrv.verifyHostAppSignedHdrReq.pSignedHdr = translate((HOST_ADDR *)&header);
+ 
